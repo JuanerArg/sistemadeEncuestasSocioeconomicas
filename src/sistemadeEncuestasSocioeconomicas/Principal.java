@@ -57,15 +57,45 @@ public class Principal {
 	//Funciones Auxiliares
 
 	public static void mostrarMenu(){
-		System.out.println("1)Agregar ");
-		System.out.println("2)");
-		System.out.println("3)");
-		System.out.println("4)");
-		System.out.println("5)");
-		System.out.println("6)");
-		System.out.println("7)");
-		System.out.println("8)");
+		System.out.println("1) Agregar persona");
+		System.out.println("2) Consultar persona");
+		System.out.println("3) Modificar persona");
+		System.out.println("4) Eliminar persona");
+		System.out.println("5) Listar todas las personas");
+		System.out.println("6) Ver estadisticas");
+		System.out.println("7) Buscar personas con mayor o menor sueldo");
+		System.out.println("8) Salir");
 	}
 
+	public static void elegirOpcion(Scanner s){
+		ingresarEntero(s, 1, 8);
+		do{
+			switch(opcion){
+				case 1:
+					ingresarPersona();
+					break;
+				case 2:
+					break;
+				case 3:
+					break;
+				case 4:
+					break;
+				case 5:
+					break;
+				case 6:
+					break;
+				case 7:
+					break;
+				case 8:
+					break;
+				case default:
+					System.err.println("ERROR: Ingrese un valor valido")
+					break
+			}
+		}while(opcion != 8)
+	}
 
+	public static int ingresarEntero(){
+		return entero;
+	}
 }
