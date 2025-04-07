@@ -32,16 +32,16 @@ public class Principal {
 			registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
 
 			System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
-			registroDeEncuestados[indice][0] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+			registroDeEncuestados[indice][2] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
 
 			System.out.print("Ingrese el nombre completo del encuestado");
-			registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
+			registroDeEncuestados[indice][3] = s.nextLine();//ToDo => Hacer mas seguro
 
 			System.out.print("Ingrese DNI del encuestado"); 
-			registroDeEncuestados[indice][0] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+			registroDeEncuestados[indice][4] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
 
 			System.out.print("Ingrese el nombre completo del encuestado");
-			registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
+			registroDeEncuestados[indice][5] = s.nextLine();//ToDo => Hacer mas seguro
 
 			indice++;
 		}while(indice < cantidadAIngresar);
