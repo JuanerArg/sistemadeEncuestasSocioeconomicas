@@ -22,49 +22,50 @@ public class Principal {
 		s.close();
 	}
 
-	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadEncuestados, int cantidadAIngresar){
-		int indice = 0;
-		do{
-			System.out.print("Ingrese DNI del encuestado"); 
-			registroDeEncuestados[indice][0] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+	//Funciones Principales
 
-			System.out.print("Ingrese el nombre completo del encuestado");
-			registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
+	public static void mostrarMenuYElegirOpcion(){
+		mostrarMenu();
+		elegirOpcion();
+	}
 
-			System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
-			registroDeEncuestados[indice][2] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadEncuestados){
 
-			System.out.print("Ingrese el nombre completo del encuestado");
-			registroDeEncuestados[indice][3] = s.nextLine();//ToDo => Hacer mas seguro
+		System.out.print("Ingrese DNI del encuestado"); 
+		registroDeEncuestados[indice][0] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
 
-			System.out.print("Ingrese DNI del encuestado"); 
-			registroDeEncuestados[indice][4] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+		System.out.print("Ingrese el nombre completo del encuestado");
+		registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
 
-			System.out.print("Ingrese el nombre completo del encuestado");
-			registroDeEncuestados[indice][5] = s.nextLine();//ToDo => Hacer mas seguro
+		System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
+		registroDeEncuestados[indice][2] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
 
-			indice++;
-		}while(indice < cantidadAIngresar);
-		cantidadEncuestados += cantidadAIngresar;
+		System.out.print("Ingrese el nombre completo del encuestado");
+		registroDeEncuestados[indice][3] = s.nextLine();//ToDo => Hacer mas seguro
+
+		System.out.print("Ingrese DNI del encuestado"); 
+		registroDeEncuestados[indice][4] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+
+		System.out.print("Ingrese el nombre completo del encuestado");
+		registroDeEncuestados[indice][5] = s.nextLine();//ToDo => Hacer mas seguro
+
+
+		cantidadEncuestados++;
 		return cantidadEncuestados;
 	};
 
-	public static int ingresarCuantasPersonas(Scanner s){
-		int cantidadAIngresar = 0;
-		boolean noAnda = false;
-		do{
-			try{
-				System.out.print("Ingrese cuantas personas va a encuestar: ");
-				cantidadAIngresar = s.nextInt();
-				if(cantidadAIngresar < MIN_CANT_ENCUESTADOS || cantidadAIngresar > MAX_CANT_ENCUESTADOS){
-					System.err.println("ERROR: Ingrese un numero de encuestados dentro de los parametros 1-60");
-					noAnda = true;
-				}
-			}catch(InputMismatchException e){
-				System.err.println("ERROR: Ingrese un numero");
-				noAnda = true;
-			}
-		}while(noAnda);
-		return cantidadAIngresar;
+	//Funciones Auxiliares
+
+	public static void mostrarMenu(){
+		System.out.println("1)Agregar ");
+		System.out.println("2)");
+		System.out.println("3)");
+		System.out.println("4)");
+		System.out.println("5)");
+		System.out.println("6)");
+		System.out.println("7)");
+		System.out.println("8)");
 	}
+
+
 }
