@@ -57,7 +57,7 @@ public class Principal {
 				System.out.print("Ingrese cuantas personas va a encuestar: ");
 				cantidadAIngresar = s.nextInt();
 				if(cantidadAIngresar < MIN_CANT_ENCUESTADOS || cantidadAIngresar > MAX_CANT_ENCUESTADOS){
-					System.err.println("Ingrese un numero de encuestados dentro de los parametros 1-60");
+					System.err.println("ERROR: Ingrese un numero de encuestados dentro de los parametros 1-60");
 					noAnda = true;
 				}
 			}catch(InputMismatchException e){
