@@ -95,14 +95,17 @@ public class Principal {
 		}while(opcion != 8)
 	}
 
-	public static int ingresarEntero(Scanner s){
+	public static int ingresarEntero(Scanner s, final int MAX, final int MIN){
 		int entero = 0;
 		boolean error = false;
 		
 		do{
 			try{
 				entero = s.nextInt();
-
+				if(entero < MIN || entero > MAX){
+					System.err.out("ERROR: Ingrese un valor entre " + MIN + " y " + MIN);
+					error = true;
+				}
 			}
 			catch(InputMismatchException e){
 				System.err.out("ERROR: Ingrese un numero de tipo entero")
@@ -115,7 +118,7 @@ public class Principal {
 
 			}
 		}while(error);
-		
+
 		return entero;
 	}
 }
