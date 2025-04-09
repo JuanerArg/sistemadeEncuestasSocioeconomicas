@@ -53,7 +53,7 @@ public class Principal {
 		return cantidadEncuestados;
 	};
 
-	public static void consultarPersona(){
+	public static void consultarPersona(Scanner s, final int MIN_DNI, final int MAX_DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados,){
 		/*
 		ingreso a quien quiero buscar => seria un ingresar entero
 		compruebo que el dato ingresado sea valido
@@ -112,7 +112,7 @@ public class Principal {
 					cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 2:
-					consultarPersona();
+					consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);
 					break;
 				case 3:
 					break;
