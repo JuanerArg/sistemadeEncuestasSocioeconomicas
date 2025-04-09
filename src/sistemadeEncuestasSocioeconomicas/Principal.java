@@ -90,14 +90,7 @@ public class Principal {
 
 	public static void manejarCambios(Scanner s, int posicionDePersonaBuscada){
 		int opcion = 0;
-		System.out.prinln("Ingrese que dato quiere editar: ");
-		System.out.prinln("1)DNI");
-		System.out.prinln("2)Nombre");
-		System.out.prinln("3)Sexo");
-		System.out.prinln("4)Edad");
-		System.out.prinln("5)Trabaja");
-		System.out.prinln("6)Sueldo");
-		System.out.println("7)Salir");
+		imprimirOpcionesDeEdicion();
 		opcion = ingresarEntero(s, 1, 7, true);
 		
 		switch(opcion){
@@ -123,6 +116,17 @@ public class Principal {
 				return -1;
 			default: System.out.prinln("ERROR: Ingrese una opcion valida");
 		}
+	}
+
+	public static void imprimirOpcionesDeEdicion(){
+		System.out.prinln("Ingrese que dato quiere editar: ");
+		System.out.prinln("1)DNI");
+		System.out.prinln("2)Nombre");
+		System.out.prinln("3)Sexo");
+		System.out.prinln("4)Edad");
+		System.out.prinln("5)Trabaja");
+		System.out.prinln("6)Sueldo");
+		System.out.println("7)Salir");
 	}
 
 	public static void cambiarDNI(Scanner s, int posicionDePersonaBuscada){
