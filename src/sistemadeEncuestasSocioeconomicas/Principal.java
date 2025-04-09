@@ -11,6 +11,7 @@ public class Principal {
 		final int ATRIBUTOS_ENCUESTADO = 6;
 		final int MIN_DNI = 10000000; final int MAX_DNI = 99999999;
 		final int MIN_SUELDO = 0; final int MAX_SUELDO = 500000;
+		final int MIN_EDAD = 18; final int MAX_EDAD = 99;
 		
 		Scanner s = new Scanner(System.in);
 		String[][] registroDeEncuestados = new String[MAX_CANT_ENCUESTADOS][ATRIBUTOS_ENCUESTADO];
@@ -29,25 +30,25 @@ public class Principal {
 		elegirOpcion();
 	}
 
-	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadEncuestados){
+	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 
 		System.out.print("Ingrese DNI del encuestado"); 
-		registroDeEncuestados[indice][0] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
-
+		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI ));
+		
 		System.out.print("Ingrese el nombre completo del encuestado");
-		registroDeEncuestados[indice][1] = s.nextLine();//ToDo => Hacer mas seguro
+		registroDeEncuestados[indice][1] = s.nextLine();
 
 		System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
-		registroDeEncuestados[indice][2] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3));
 
-		System.out.print("Ingrese el nombre completo del encuestado");
-		registroDeEncuestados[indice][3] = s.nextLine();//ToDo => Hacer mas seguro
+		System.out.print("Ingrese la edad del encuestado");
+		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, 18, 99));
 
-		System.out.print("Ingrese DNI del encuestado"); 
-		registroDeEncuestados[indice][4] = Integer.toString(s.nextInt());//ToDo => Hacer mas seguro
+		System.out.print("Ingrese si el encuestado trabaja(1) o si no (2)"); 
+		registroDeEncuestados[indice][4] = Integer.toString(ingresarEntero(s, 1, 2));
 
-		System.out.print("Ingrese el nombre completo del encuestado");
-		registroDeEncuestados[indice][5] = s.nextLine();//ToDo => Hacer mas seguro
+		System.out.print("Ingrese el sueldo del encuestado");
+		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, 0, 500000));
 
 
 		cantidadEncuestados++;
@@ -103,17 +104,17 @@ public class Principal {
 			try{
 				entero = s.nextInt();
 				if(entero < MIN || entero > MAX){
-					System.err.out("ERROR: Ingrese un valor entre " + MIN + " y " + MIN);
+					System.err.println("ERROR: Ingrese un valor entre " + MIN + " y " + MIN);
 					error = true;
 				}
 			}
 			catch(InputMismatchException e){
-				System.err.out("ERROR: Ingrese un numero de tipo entero")
+				System.err.println("ERROR: Ingrese un numero de tipo entero")
 				error = true;
 			
 			}
 			catch(Exeption e){
-				System.err.out("ERROR: Algo salio mal, intente otra vez");
+				System.err.println("ERROR: Algo salio mal, intente otra vez");
 				error = true
 
 			}
