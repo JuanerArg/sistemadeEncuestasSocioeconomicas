@@ -15,9 +15,8 @@ public class Principal {
 		
 		Scanner s = new Scanner(System.in);
 		String[][] registroDeEncuestados = new String[MAX_CANT_ENCUESTADOS][ATRIBUTOS_ENCUESTADO];
-		int cantidadEncuestados = 0;
-
-		int cantidadAIngresar = ingresarCuantasPersonas(s);
+		int cantidadDeEncuestados = 0;
+		
 		cantidadEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadEncuestados, cantidadAIngresar);
 		
 		s.close();
@@ -30,7 +29,7 @@ public class Principal {
 		elegirOpcion();
 	}
 
-	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
+	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 
 		System.out.print("Ingrese DNI del encuestado"); 
 		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI ));
@@ -67,12 +66,12 @@ public class Principal {
 		System.out.println("8) Salir");
 	}
 
-	public static void elegirOpcion(Scanner s){
+	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidaDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		ingresarEntero(s, 1, 8);
 		do{
 			switch(opcion){
 				case 1:
-					ingresarPersona();
+					ingresarPersona(s, registroDeEncuestados, cantidaDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 2:
 					break;
