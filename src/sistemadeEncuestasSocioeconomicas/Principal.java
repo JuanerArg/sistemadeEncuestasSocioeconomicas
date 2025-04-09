@@ -53,7 +53,45 @@ public class Principal {
 		return cantidadEncuestados;
 	};
 
+	public static void consultarPersona(){
+		/*
+		ingreso a quien quiero buscar => seria un ingresar entero
+		compruebo que el dato ingresado sea valido
+		busco
+			verifico que este dentro del rango de gente ingresada(si indice > cantidadDeEncuestados ya se que no va)
+			realizo la busqueda
+				caso 1 no lo encuentro imprimo eso
+				caso 2 lo encuentro imprimo a quien se buscaba
+		*/
+
+		System.out.println("Ingrese el DNI de la persona que busca");
+		int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
+
+		int posicionEnMatriz = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
+
+		if(posicionEnMatriz == 0){
+			System.out.println("No se encontro a nadie con ese DNI en la base de datos")
+		}
+
+		imprimirDatosPersona(registroDeEncuestados, posicionEnMatriz);
+	}
+
 	//Funciones Auxiliares
+	
+	public static void imprimirDatosPersona(String[][] registroDeEncuestados, int posicionEnMatriz){
+		for(int indice = 0; indice < 4; indice++){
+			System.out.println(registroDeEncuestados[posicionEnMatriz][indice]);
+		}
+	}
+
+	public static int buscarEnMatriz(final int DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados){
+		for(int indice = 0, indice < cantidadDeEncuestados; indice++){
+			if(DNI == Integer.parseInt(registroDeEncuestados[indice][0])){
+				return indice;
+			}
+			return 0;
+		}
+	}
 
 	public static void mostrarMenu(){
 		System.out.println("1) Agregar persona");
@@ -66,7 +104,7 @@ public class Principal {
 		System.out.println("8) Salir");
 	}
 
-	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidaDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
+	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		opcion = ingresarEntero(s, 1, 8);
 		do{
 			switch(opcion){
@@ -95,11 +133,13 @@ public class Principal {
 		}while(opcion != 8);
 	}
 
-	public static int ingresarEntero(Scanner s, final int MAX, final int MIN){
+	public static int ingresarEntero(Scanner s, final int MIN, final int MAX, boolean usarSalidaDeDatos){
 		int entero = 0;
 		boolean error = false;
 		
-		System.out.println("Ingrese un valor entero entre " + MIN + " y " + MAX);
+		if(usarSalidaDeDatos){
+			System.out.println("Ingrese un valor entero entre " + MIN + " y " + MAX);
+		}
 
 		do{
 			try{
