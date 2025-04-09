@@ -24,7 +24,7 @@ public class Principal {
 
 	//Funciones Principales
 
-	public static void mostrarMenuYElegirOpcion(){
+	public static void mostrarMenuYElegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidaDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		mostrarMenu();
 		elegirOpcion();
 	}
@@ -74,6 +74,7 @@ public class Principal {
 					cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 2:
+					consultarPersona();
 					break;
 				case 3:
 					break;
@@ -98,6 +99,8 @@ public class Principal {
 		int entero = 0;
 		boolean error = false;
 		
+		System.out.println("Ingrese un valor entero entre " + MIN + " y " + MAX);
+
 		do{
 			try{
 				entero = s.nextInt();
