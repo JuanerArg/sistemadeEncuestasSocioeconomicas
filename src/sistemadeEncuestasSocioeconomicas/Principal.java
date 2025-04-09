@@ -16,7 +16,7 @@ public class Principal {
 		Scanner s = new Scanner(System.in);
 		String[][] registroDeEncuestados = new String[MAX_CANT_ENCUESTADOS][ATRIBUTOS_ENCUESTADO];
 		int cantidadDeEncuestados = 0;
-		
+
 		cantidadEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadEncuestados, cantidadAIngresar);
 		
 		s.close();
@@ -67,11 +67,11 @@ public class Principal {
 	}
 
 	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidaDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
-		ingresarEntero(s, 1, 8);
+		opcion = ingresarEntero(s, 1, 8);
 		do{
 			switch(opcion){
 				case 1:
-					ingresarPersona(s, registroDeEncuestados, cantidaDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
+					cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 2:
 					break;
@@ -87,11 +87,11 @@ public class Principal {
 					break;
 				case 8:
 					break;
-				case default:
-					System.err.println("ERROR: Ingrese un valor valido")
-					break
+				default:
+					System.err.println("ERROR: Ingrese un valor valido");
+					break;
 			}
-		}while(opcion != 8)
+		}while(opcion != 8);
 	}
 
 	public static int ingresarEntero(Scanner s, final int MAX, final int MIN){
