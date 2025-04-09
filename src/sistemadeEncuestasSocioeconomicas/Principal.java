@@ -95,7 +95,27 @@ public class Principal {
 		}while(opcion != 8)
 	}
 
-	public static int ingresarEntero(){
+	public static int ingresarEntero(Scanner s){
+		int entero = 0;
+		boolean error = false;
+		
+		do{
+			try{
+				entero = s.nextInt();
+
+			}
+			catch(InputMismatchException e){
+				System.err.out("ERROR: Ingrese un numero de tipo entero")
+				error = true;
+			
+			}
+			catch(Exeption e){
+				System.err.out("ERROR: Algo salio mal, intente otra vez");
+				error = true
+
+			}
+		}while(error);
+		
 		return entero;
 	}
 }
