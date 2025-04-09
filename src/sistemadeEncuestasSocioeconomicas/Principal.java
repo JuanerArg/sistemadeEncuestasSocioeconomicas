@@ -17,20 +17,22 @@ public class Principal {
 		String[][] registroDeEncuestados = new String[MAX_CANT_ENCUESTADOS][ATRIBUTOS_ENCUESTADO];
 		int cantidadDeEncuestados = 0;
 		
+		mostrarMenuYElegirOpcion(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
+		
 		s.close();
 	}	
 
 	//Funciones Principales
 
-	public static void mostrarMenuYElegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidaDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
-		mostrarMenu();
+	public static void mostrarMenuYElegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		elegirOpcion(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 	}
 
 	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		int indice = cantidadDeEncuestados;
 		System.out.print("Ingrese DNI del encuestado"); 
-		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI, true));
+		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI, false));
+		s.nextLine();
 		
 		System.out.print("Ingrese el nombre completo del encuestado");
 		registroDeEncuestados[indice][1] = s.nextLine();
@@ -38,7 +40,7 @@ public class Principal {
 		System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
 		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3, false));
 
-		System.out.print("Ingrese la edad del encuestado");
+		System.out.println("Ingrese la edad del encuestado");
 		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, MIN_EDAD, MAX_EDAD, true));
 
 		System.out.print("Ingrese si el encuestado trabaja(1) o si no (2)"); 
@@ -61,14 +63,17 @@ public class Principal {
 				caso 1 no lo encuentro imprimo eso
 				caso 2 lo encuentro imprimo a quien se buscaba
 		*/
-
+		boolean vacio = verificarSiVacio(registroDeEncuestados);
+		if(vacio) return;
+		
 		System.out.println("Ingrese el DNI de la persona que busca");
 		final int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
-
+		
 		int posicionEnMatriz = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
 
 		if(posicionEnMatriz == -1){
 			System.out.println("No se encontro a nadie con ese DNI en la base de datos");
+			return;
 		}
 
 		imprimirDatosPersona(registroDeEncuestados, posicionEnMatriz);
@@ -80,10 +85,38 @@ public class Principal {
 
 		int posicionDePersonaBuscada = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
 
-		manejarCambios(s, posicionDePersonaBuscada, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_EDAD, MAX_EDAD, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
+		manejarCambios(s, posicionDePersonaBuscada, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_EDAD, MAX_EDAD, MIN_SUELDO, MAX_SUELDO);
+	}
+	
+	public static void eliminarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI) {
+		System.out.println("Ingrese el DNI de la persona que quiera borrar del sistema");
+		int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
+		
+		int indiceDePersonaABorrar = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
+		
+		if(registroDeEncuestados[indiceDePersonaABorrar + 1][0] != null) {
+			for(int indice = indiceDePersonaABorrar + 1; indice < cantidadDeEncuestados; indice++) {
+				registroDeEncuestados[indice - 1] = registroDeEncuestados[indice];
+			}
+		}else{
+			for(int indice = 0; indice < 6; indice++) {
+				registroDeEncuestados[indiceDePersonaABorrar][indice] = null;
+			}
+		}
 	}
 	
 	//Funciones Auxiliares
+	
+	public static boolean verificarSiVacio(String[][] registroDeEncuestados) {
+		
+		if(registroDeEncuestados[0][0] == null) {
+			System.out.println("La base de datos esta vacia, ingrese informacion e intente otra vez");
+			return true;
+		}else {
+			System.out.println("La base de datos no esta vacia");
+			return false;
+		}
+	}
 
 	public static void manejarCambios(Scanner s, int posicionDePersonaBuscada, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		int opcion = 0;
@@ -157,7 +190,7 @@ public class Principal {
 	}	
 	
 	public static void imprimirDatosPersona(String[][] registroDeEncuestados, int posicionEnMatriz){
-		for(int indice = 0; indice < 5; indice++){
+		for(int indice = 0; indice < 6; indice++){
 			System.out.println(registroDeEncuestados[posicionEnMatriz][indice]);
 		}
 	}
@@ -183,19 +216,22 @@ public class Principal {
 	}
 
 	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
-		int opcion = ingresarEntero(s, 1, 8);
+		int opcion;
 		do{
+			mostrarMenu();
+			opcion = ingresarEntero(s, 1, 8, true);
 			switch(opcion){
 				case 1:
 					cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 2:
-					consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);
+					consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);//MEJORAR
 					break;
 				case 3:
 					modificarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 					break;
 				case 4:
+					eliminarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI);
 					break;
 				case 5:
 					break;
