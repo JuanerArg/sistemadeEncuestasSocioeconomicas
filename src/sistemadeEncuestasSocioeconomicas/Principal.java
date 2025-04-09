@@ -42,14 +42,13 @@ public class Principal {
 		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3));
 
 		System.out.print("Ingrese la edad del encuestado");
-		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, 18, 99));
+		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, MIN_EDAD, MAX_EDAD));
 
 		System.out.print("Ingrese si el encuestado trabaja(1) o si no (2)"); 
 		registroDeEncuestados[indice][4] = Integer.toString(ingresarEntero(s, 1, 2));
 
 		System.out.print("Ingrese el sueldo del encuestado");
-		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, 0, 500000));
-
+		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, MIN_SUELDO, MAX_SUELDO));
 
 		cantidadEncuestados++;
 		return cantidadEncuestados;
