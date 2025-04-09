@@ -17,7 +17,7 @@ public class Principal {
 		String[][] registroDeEncuestados = new String[MAX_CANT_ENCUESTADOS][ATRIBUTOS_ENCUESTADO];
 		int cantidadDeEncuestados = 0;
 
-		cantidadEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadEncuestados, cantidadAIngresar);
+		cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados,);
 		
 		s.close();
 	}
@@ -30,30 +30,30 @@ public class Principal {
 	}
 
 	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
-
+		int indice = cantidadDeEncuestados;
 		System.out.print("Ingrese DNI del encuestado"); 
-		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI ));
+		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI, true));
 		
 		System.out.print("Ingrese el nombre completo del encuestado");
 		registroDeEncuestados[indice][1] = s.nextLine();
 
 		System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
-		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3));
+		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3, false));
 
 		System.out.print("Ingrese la edad del encuestado");
-		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, MIN_EDAD, MAX_EDAD));
+		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, MIN_EDAD, MAX_EDAD, true));
 
 		System.out.print("Ingrese si el encuestado trabaja(1) o si no (2)"); 
-		registroDeEncuestados[indice][4] = Integer.toString(ingresarEntero(s, 1, 2));
+		registroDeEncuestados[indice][4] = Integer.toString(ingresarEntero(s, 1, 2, false));
 
 		System.out.print("Ingrese el sueldo del encuestado");
-		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, MIN_SUELDO, MAX_SUELDO));
+		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, MIN_SUELDO, MAX_SUELDO, true));
 
 		cantidadEncuestados++;
 		return cantidadEncuestados;
 	};
 
-	public static void consultarPersona(Scanner s, final int MIN_DNI, final int MAX_DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados,){
+	public static void consultarPersona(Scanner s, final int MIN_DNI, final int MAX_DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados){
 		/*
 		ingreso a quien quiero buscar => seria un ingresar entero
 		compruebo que el dato ingresado sea valido
@@ -65,32 +65,109 @@ public class Principal {
 		*/
 
 		System.out.println("Ingrese el DNI de la persona que busca");
-		int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
+		final int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
 
 		int posicionEnMatriz = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
 
-		if(posicionEnMatriz == 0){
+		if(posicionEnMatriz == -1){
 			System.out.println("No se encontro a nadie con ese DNI en la base de datos")
 		}
 
 		imprimirDatosPersona(registroDeEncuestados, posicionEnMatriz);
 	}
 
+	public static void modificarPersona(Scanner s, int cantidadDeEncuestados, String[][] registroDeEncuestados, ){
+		System.out.prinln("Ingrese DNI de la persona a modificar")
+		final int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
+
+		int posicionDePersonaBuscada = buscarEnMatriz(DNI, cantidadDeEncuestados, registroDeEncuestados);
+
+		manejarCambios(s, posicionDePersonaBuscada);
+		
+	}
+	
 	//Funciones Auxiliares
+
+	public static void manejarCambios(Scanner s, int posicionDePersonaBuscada){
+		int opcion = 0;
+		System.out.prinln("Ingrese que dato quiere editar: ");
+		System.out.prinln("1)DNI");
+		System.out.prinln("2)Nombre");
+		System.out.prinln("3)Sexo");
+		System.out.prinln("4)Edad");
+		System.out.prinln("5)Trabaja");
+		System.out.prinln("6)Sueldo");
+		System.out.println("7)Salir");
+		opcion = ingresarEntero(s, 1, 7, true);
+		
+		switch(opcion){
+			case 1: 
+				cambiarDNI(s, posicionDePersonaBuscada);
+				break;
+			case 2: 
+				cambiarNombre(s, posicionDePersonaBuscada);
+				break;
+			case 3: 
+				cambiarSexo(s, posicionDePersonaBuscada);
+				break;
+			case 4: 
+				cambiarEdad(s, posicionDePersonaBuscada);
+				break;
+			case 5: 
+				cambiarTrabaja(s, posicionDePersonaBuscada);
+				break;
+			case 6: 
+				cambiarSueldo(s, posicionDePersonaBuscada);
+				break;
+			case 7: 
+				return -1;
+			default: System.out.prinln("ERROR: Ingrese una opcion valida");
+		}
+	}
+
+	public static void cambiarDNI(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese el DNI nuevo del encuestado"); 
+		registroDeEncuestados[posicionDePersonaBuscada][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI, true));
+	}
+
+	public static void cambiarNombre(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese el nombre completo del encuestado");
+		registroDeEncuestados[indice][1] = s.nextLine();
+	}
+
+	public static void cambiarSexo(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese el sexo del encuestado, siendo 1 masculino, 2 femenino y 3 otro"); 
+		registroDeEncuestados[indice][2] = Integer.toString(ingresarEntero(s, 1, 3, false));
+	}
+
+	public static void cambiarEdad(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese la edad del encuestado");
+		registroDeEncuestados[indice][3] = Integer.toString(ingresarEntero(s, MIN_EDAD, MAX_EDAD, true));
+	}
+
+	public static void cambiarTrabaja(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese si el encuestado trabaja(1) o si no (2)"); 
+		registroDeEncuestados[indice][4] = Integer.toString(ingresarEntero(s, 1, 2, false));
+	}
+
+	public static void cambiarSueldo(Scanner s, int posicionDePersonaBuscada){
+		System.out.print("Ingrese el nuevo sueldo del encuestado");
+		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, MIN_SUELDO, MAX_SUELDO, true));
+	}	
 	
 	public static void imprimirDatosPersona(String[][] registroDeEncuestados, int posicionEnMatriz){
-		for(int indice = 0; indice < 4; indice++){
+		for(int indice = 0; indice < 5; indice++){
 			System.out.println(registroDeEncuestados[posicionEnMatriz][indice]);
 		}
 	}
 
 	public static int buscarEnMatriz(final int DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados){
-		for(int indice = 0, indice < cantidadDeEncuestados; indice++){
+		for(int indice = 0; indice < cantidadDeEncuestados; indice++){
 			if(DNI == Integer.parseInt(registroDeEncuestados[indice][0])){
 				return indice;
 			}
-			return 0;
 		}
+		return -1;
 	}
 
 	public static void mostrarMenu(){
@@ -115,6 +192,7 @@ public class Principal {
 					consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);
 					break;
 				case 3:
+					modificarPersona();
 					break;
 				case 4:
 					break;
@@ -150,13 +228,13 @@ public class Principal {
 				}
 			}
 			catch(InputMismatchException e){
-				System.err.println("ERROR: Ingrese un numero de tipo entero")
+				System.err.println("ERROR: Ingrese un numero de tipo entero");
 				error = true;
 			
 			}
-			catch(Exeption e){
+			catch(Exception e){
 				System.err.println("ERROR: Algo salio mal, intente otra vez");
-				error = true
+				error = true;
 
 			}
 		}while(error);
