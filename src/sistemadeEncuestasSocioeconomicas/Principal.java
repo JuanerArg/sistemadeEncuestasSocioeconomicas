@@ -31,7 +31,12 @@ public class Principal {
 	public static int ingresarPersona(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		int indice = cantidadDeEncuestados;
 		System.out.print("Ingrese DNI del encuestado"); 
-		registroDeEncuestados[indice][0] = Integer.toString(ingresarEntero(s, MIN_DNI, MAX_DNI, false));
+		int DNI = ingresarEntero(s, MIN_DNI, MAX_DNI, false);
+		if(validarDNI(DNI, registroDeEncuestados, cantidadDeEncuestados)) {
+			return cantidadDeEncuestados;
+		}
+		registroDeEncuestados[indice][0] = Integer.toString(DNI);
+		
 		s.nextLine();
 		
 		System.out.print("Ingrese el nombre completo del encuestado");
@@ -49,8 +54,7 @@ public class Principal {
 		System.out.print("Ingrese el sueldo del encuestado");
 		registroDeEncuestados[indice][5] = Integer.toString(ingresarEntero(s, MIN_SUELDO, MAX_SUELDO, true));
 
-		cantidadDeEncuestados++;
-		return cantidadDeEncuestados;
+		return ++cantidadDeEncuestados;
 	};
 
 	public static void consultarPersona(Scanner s, final int MIN_DNI, final int MAX_DNI, int cantidadDeEncuestados, String[][] registroDeEncuestados){
@@ -63,7 +67,7 @@ public class Principal {
 				caso 1 no lo encuentro imprimo eso
 				caso 2 lo encuentro imprimo a quien se buscaba
 		*/
-		boolean vacio = verificarSiVacio(registroDeEncuestados);
+		boolean vacio = verificarSiVacio(registroDeEncuestados, true);
 		if(vacio) return;
 		
 		System.out.println("Ingrese el DNI de la persona que busca");
@@ -105,15 +109,233 @@ public class Principal {
 		}
 	}
 	
+	public static int generarAccion(int opcion, Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD) {
+		switch(opcion){
+		case 1:
+			cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
+			break;
+		case 2:
+			consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);//MEJORAR
+			break;
+		case 3:
+			modificarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
+			break;
+		case 4:
+			eliminarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI);
+			break;
+		case 5:
+			listarPersonas(registroDeEncuestados, cantidadDeEncuestados);
+			break;
+		case 6:
+			break;
+		case 7:
+			break;
+		case 8:
+			break;
+		default:
+			System.err.println("ERROR: Ingrese un valor valido");
+			break;
+		}
+		return cantidadDeEncuestados;
+	}
+
+	public static boolean validarDNI(int DNI, String[][] registroDeEncuestados, int cantidadDeEncuestados) {
+		if(verificarSiVacio(registroDeEncuestados, false)) {
+			return false;
+		}
+		for(int indice = 0; indice < cantidadDeEncuestados; indice++) {
+			if(DNI == Integer.valueOf(registroDeEncuestados[indice][0])) {
+				System.err.println("ERROR: DNI duplicado");
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public static void listarPersonas(String[][] registroDeEncuestados, int cantidadDeEncuestados) {
+		for(int personasIndex = 0; personasIndex < cantidadDeEncuestados; personasIndex++) {
+			for(int atributosIndex = 0; atributosIndex < 5; atributosIndex++) {
+				System.out.println(registroDeEncuestados[personasIndex][atributosIndex]);
+			}
+		}
+	}
+
+	public static void mostrarEstadisticas(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		calcularPorcentajeDeGenero(cantidadDeEncuestados, registroDeEncuestados);
+		calcularPorcentajeDeGeneroQueTrabaja(cantidadDeEncuestados, registroDeEncuestados);
+		calcularSueldoPromedio(cantidadDeEncuestados, registroDeEncuestados);
+		calcularSueldoPromedioPorGenero(cantidadDeEncuestados, registroDeEncuestados);
+		calcularEdadPromedio(cantidadDeEncuestados, registroDeEncuestados);
+	}
 	//Funciones Auxiliares
 	
-	public static boolean verificarSiVacio(String[][] registroDeEncuestados) {
+	public static void calcularEdadPromedio(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int sumaEdades = 0;
+		
+		for (int i = 0; i < cantidadDeEncuestados; i++) {
+			int edad = Integer.parseInt(registroDeEncuestados[i][3]);
+			sumaEdades += edad;
+		}
+		
+		if (cantidadDeEncuestados > 0) {
+			double promedio = (double) sumaEdades / cantidadDeEncuestados;
+			System.out.printf("Edad promedio general: %.2f años\n", promedio);
+		} else {
+			System.out.println("No hay personas cargadas para calcular edad promedio.");
+		}
+	}
+
+	
+	public static void calcularSueldoPromedioPorGenero(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int[] sumaSueldos = new int[3];
+		int[] cantidadPorGenero = new int[3];
+		
+		for (int i = 0; i < cantidadDeEncuestados; i++) {
+			int genero = Integer.parseInt(registroDeEncuestados[i][2]) - 1;
+			int sueldo = Integer.parseInt(registroDeEncuestados[i][5]);
+			
+			if (genero >= 0 && genero < 3) {
+				sumaSueldos[genero] += sueldo;
+				cantidadPorGenero[genero]++;
+			}
+		}
+		
+		String[] etiquetas = {"Masculino", "Femenino", "Otro"};
+		for (int i = 0; i < 3; i++) {
+			if (cantidadPorGenero[i] > 0) {
+				double promedio = (double) sumaSueldos[i] / cantidadPorGenero[i];
+				System.out.printf("Sueldo promedio de %s: $%.2f\n", etiquetas[i], promedio);
+			} else {
+				System.out.printf("No hay datos de sueldos para el género %s.\n", etiquetas[i]);
+			}
+		}
+	}
+
+	public static void calcularSueldoPromedio(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int sumaSueldos = 0;
+		int cantidadValidos = 0;
+		
+		for (int i = 0; i < cantidadDeEncuestados; i++) {
+			int sueldo = Integer.parseInt(registroDeEncuestados[i][5]);
+			sumaSueldos += sueldo;
+			cantidadValidos++;
+		}
+		
+		if (cantidadValidos > 0) {
+			double promedio = (double) sumaSueldos / cantidadValidos;
+			System.out.printf("Sueldo promedio general: $%.2f\n", promedio);
+		} else {
+			System.out.println("No hay datos de sueldos para calcular el promedio.");
+		}
+	}
+	
+
+	
+	public static void calcularPorcentajeDeGeneroQueTrabaja(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int[] cantidadDePersonasQueTrabajan = new int[4];
+		cantidadDePersonasQueTrabajan = contarCuantosTrabajan(cantidadDeEncuestados, registroDeEncuestados);
+		
+		float[] porcentajeDePersonasQueTrabajanDeCadaGenero = new float[3];
+		porcentajeDePersonasQueTrabajanDeCadaGenero = calcularPorcentajeDePersonasQueTrabajan(cantidadDePersonasQueTrabajan);
+		
+		imprimirPorcentajeDePersonasQueTrabajanDeCadaGenero(porcentajeDePersonasQueTrabajanDeCadaGenero);
+	}
+
+	public static void imprimirPorcentajeDePersonasQueTrabajanDeCadaGenero(float[] porcentajeDePersonasQueTrabajanDeCadaGenero) {
+		for(int indice = 0; indice < 2; indice++) {
+			switch(indice) {
+				case 1:
+					System.out.println("El porcentaje de hombres" + porcentajeDePersonasQueTrabajanDeCadaGenero[indice]);
+					break;
+				case 2:
+					System.out.println("El porcentaje de mujeres" + porcentajeDePersonasQueTrabajanDeCadaGenero[indice]);
+					break;
+				case 3:
+					System.out.println("El porcentaje de otros" + porcentajeDePersonasQueTrabajanDeCadaGenero[indice]);
+					break;
+			}
+		}
+	}
+
+	public static float[] calcularPorcentajeDePersonasQueTrabajan(int[] cantidadDePersonasQueTrabajan) {
+		float porcentajeDeHombresQueTrabajan = (cantidadDePersonasQueTrabajan[0]/100)*cantidadDePersonasQueTrabajan[3];
+		float porcentajeDeMujeresQueTrabajan = (cantidadDePersonasQueTrabajan[1]/100)*cantidadDePersonasQueTrabajan[3];
+		float porcentajeDeOtrosQueTrabajan = (cantidadDePersonasQueTrabajan[2]/100)*cantidadDePersonasQueTrabajan[3];
+		float[] porcentajesDeGenerosQueTrabajan = new float []{porcentajeDeHombresQueTrabajan, porcentajeDeMujeresQueTrabajan, porcentajeDeOtrosQueTrabajan};
+		return porcentajesDeGenerosQueTrabajan;
+	}
+	
+	public static int[] contarCuantosTrabajan(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int contadorDeHombresQueTrabajan = 0;
+		int contadorDeMujeresQueTrabajan = 0;
+		int contadorDeOtrosQueTrabajan = 0;
+		int cantidadQueTrabajan = 0;
+
+		for(int indice = 0; indice < cantidadDeEncuestados; indice++) {
+			if(registroDeEncuestados[indice][2] == "1" && registroDeEncuestados[indice][4] == "1") {
+				contadorDeHombresQueTrabajan++;
+				cantidadQueTrabajan++;
+			}else if(registroDeEncuestados[indice][2] == "2" && registroDeEncuestados[indice][4] == "1") {
+				contadorDeMujeresQueTrabajan++;
+				cantidadQueTrabajan++;
+			}else if(registroDeEncuestados[indice][2] == "3" && registroDeEncuestados[indice][4] == "1") {
+				contadorDeOtrosQueTrabajan++;
+				cantidadQueTrabajan++;
+			}
+		}
+		int[] cantidadDePersonasQueTrabajan = new int[] {contadorDeHombresQueTrabajan, contadorDeMujeresQueTrabajan, contadorDeOtrosQueTrabajan, cantidadQueTrabajan};
+		return cantidadDePersonasQueTrabajan;
+	}
+	
+	public static void calcularPorcentajeDeGenero(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int[] cantidadDeGeneros = new int[3];	
+		float[] porcentajesDeGeneros = new float [3];
+		cantidadDeGeneros = contarDistintosGeneros(cantidadDeEncuestados, registroDeEncuestados)	;
+		porcentajesDeGeneros  = calcularPorcentaje(cantidadDeEncuestados, cantidadDeGeneros);
+		imprimirPorcentajes(porcentajesDeGeneros);
+	}
+
+	public static void imprimirPorcentajes(float[] porcentajesDeGeneros) {
+		imprimirPorcentajeDePersonasQueTrabajanDeCadaGenero(porcentajesDeGeneros);
+	}
+
+	public static float[] calcularPorcentaje(int cantidadDeEncuestados, int[] cantidadDeGeneros) {
+		float porcentajeDeHombres = (cantidadDeGeneros[1]/100)*cantidadDeEncuestados;
+		float porcentajeDeMujeres = (cantidadDeGeneros[2]/100)*cantidadDeEncuestados;
+		float porcentajeDeOtros = (cantidadDeGeneros[3]/100)*cantidadDeEncuestados;
+		float[] porcentajesDeGeneros = new float []{porcentajeDeHombres, porcentajeDeMujeres, porcentajeDeOtros};
+		return porcentajesDeGeneros;
+	}
+	
+	public static int[] contarDistintosGeneros(int cantidadDeEncuestados, String[][] registroDeEncuestados) {
+		int contadorDeHombres = 0;
+		int contadorDeMujeres = 0;
+		int contadorDeOtro = 0;
+
+		for(int indice = 0; indice < cantidadDeEncuestados; indice++) {
+			if(registroDeEncuestados[indice][2] == "1") {
+				contadorDeHombres++;
+			}else if(registroDeEncuestados[indice][2] == "2") {
+				contadorDeMujeres++;
+			}else if(registroDeEncuestados[indice][2] == "3") {
+				contadorDeOtro++;
+			}
+		}
+		int[] cantidadPorGenero = new int[] {contadorDeHombres, contadorDeMujeres, contadorDeOtro};
+		return cantidadPorGenero;
+	}
+	
+	public static boolean verificarSiVacio(String[][] registroDeEncuestados, boolean usarSysOut) {
 		
 		if(registroDeEncuestados[0][0] == null) {
-			System.out.println("La base de datos esta vacia, ingrese informacion e intente otra vez");
+			if(usarSysOut) {
+				System.out.println("La base de datos esta vacia, ingrese informacion e intente otra vez");
+			}
 			return true;
 		}else {
-			System.out.println("La base de datos no esta vacia");
+			if(usarSysOut) {
+				System.out.println("La base de datos no esta vacia");
+			}
 			return false;
 		}
 	}
@@ -215,39 +437,16 @@ public class Principal {
 		System.out.println("8) Salir");
 	}
 
+	
 	public static void elegirOpcion(Scanner s, String[][] registroDeEncuestados, int cantidadDeEncuestados, final int MIN_DNI, final int MAX_DNI, final int MIN_SUELDO, final int MAX_SUELDO, final int MIN_EDAD, final int MAX_EDAD){
 		int opcion;
 		do{
 			mostrarMenu();
 			opcion = ingresarEntero(s, 1, 8, true);
-			switch(opcion){
-				case 1:
-					cantidadDeEncuestados = ingresarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
-					break;
-				case 2:
-					consultarPersona(s, MIN_DNI, MAX_DNI, cantidadDeEncuestados, registroDeEncuestados);//MEJORAR
-					break;
-				case 3:
-					modificarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
-					break;
-				case 4:
-					eliminarPersona(s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI);
-					break;
-				case 5:
-					break;
-				case 6:
-					break;
-				case 7:
-					break;
-				case 8:
-					break;
-				default:
-					System.err.println("ERROR: Ingrese un valor valido");
-					break;
-			}
+			cantidadDeEncuestados = generarAccion(opcion, s, registroDeEncuestados, cantidadDeEncuestados, MIN_DNI, MAX_DNI, MIN_SUELDO, MAX_SUELDO, MIN_EDAD, MAX_EDAD);
 		}while(opcion != 8);
 	}
-
+		
 	public static int ingresarEntero(Scanner s, final int MIN, final int MAX, boolean usarSalidaDeDatos){
 		int entero = 0;
 		boolean error = false;
